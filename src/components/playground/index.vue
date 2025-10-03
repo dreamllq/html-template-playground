@@ -1,0 +1,44 @@
+<template>
+  <div :style='style'>
+    <layout>
+      <template #toolbar>
+        1
+      </template>
+      <template #drawing-board>
+        <drawing-board v-if='!refreshFlag' />
+      </template>
+      <template #block-tabs>
+        <block-tabs :default-active='activeBlock' @change='onBlockChange' />
+      </template>
+      <template #block>
+        <component-block v-if='activeBlock === "component"' />
+        <logic-block v-else-if='activeBlock === "logic"' />
+        <style-board v-else-if='activeBlock === "style"' />
+      </template>
+    </layout>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useStore } from '../store';
+import Layout from './layout.vue';
+import BlockTabs from '../blocks/tabs.vue';
+import { ref } from 'vue';
+import { useBlockTabs } from './use-block-tabs';
+import ComponentBlock from '../blocks/component/index.vue';
+import LogicBlock from '../blocks/logic/index.vue';
+import DrawingBoard from '../drawing-board/index.vue';
+import StyleBoard from '../blocks/style/index.vue';
+
+const { playground, refreshFlag } = useStore()!;
+const style = {
+  width: playground.width,
+  height: playground.height
+};
+const { activeBlock, onBlockChange } = useBlockTabs();
+
+</script>
+
+<style scoped>
+
+</style>

@@ -1,11 +1,10 @@
 <template>
   <div>
-    <playground-view />
+    2
   </div>
 </template>
 
 <script setup lang="ts">
-import { PlaygroundView } from '@/index.ts';
 
 </script>
 
