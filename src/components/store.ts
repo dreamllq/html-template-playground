@@ -15,10 +15,11 @@ import ForRender from './drawing-board/logic/for-render.vue';
 import { If } from '@/models/logics/if';
 import IfRender from './drawing-board/logic/if-render.vue';
 import { useDrag } from './drawing-board/use-drag';
+import { useStorage } from './storage';
 
 const [useProvideStore, useStore] = createInjectionState(() => {
 
-  const boardSize = ref('pc');
+  const boardSize = ref('a4');
 
   const playground = new Playground();
   const drawingBoardId = ref('htp-db-kdk');
@@ -34,6 +35,7 @@ const [useProvideStore, useStore] = createInjectionState(() => {
     await nextTick();
     cellSelected.refresh();
     console.log(playground);
+    storage.save();
   };
 
   const drag = useDrag({
@@ -49,6 +51,7 @@ const [useProvideStore, useStore] = createInjectionState(() => {
     playground,
     drawingBoardId 
   });
+  const storage = useStorage({ playground });
 
 
   playground.componentBlocks.list.push({
@@ -87,31 +90,37 @@ const [useProvideStore, useStore] = createInjectionState(() => {
     render: IfRender
   });
 
-  const div1 = new Div();
-  div1.style = {
-    minHeight: '30px',
-    padding: '10px'
-  };
+  console.log(storage.config.value);
+  
+  playground.init(storage.config.value);
+  // console.log(data);
+  
 
-  const span2 = new Span();
-  span2.style = { fontSize: '22px' };
+  // const div1 = new Div();
+  // div1.style = {
+  //   minHeight: '30px',
+  //   padding: '10px'
+  // };
 
-  const div2 = new Div();
-  div2.style = {
-    minHeight: '30px',
-    padding: '10px',
-    marginTop: '30px'
-  };
-  div1.children.push(span2);
-  span2.parent = div1;
+  // const span2 = new Span();
+  // span2.style = { fontSize: '22px' };
 
-  const span1 = new Span();
-  span1.style = {
-    fontSize: '30px',
-    color: 'red'
-  };
+  // const div2 = new Div();
+  // div2.style = {
+  //   minHeight: '30px',
+  //   padding: '10px',
+  //   marginTop: '30px'
+  // };
+  // div1.children.push(span2);
+  // span2.parent = div1;
 
-  playground.drawingBoard.document.list.push(div1, div2, span1);
+  // const span1 = new Span();
+  // span1.style = {
+  //   fontSize: '30px',
+  //   color: 'red'
+  // };
+
+  // playground.drawingBoard.document.list.push(div1, div2, span1);
 
   console.log(playground);
 
@@ -126,7 +135,8 @@ const [useProvideStore, useStore] = createInjectionState(() => {
     refreshFlag,
     cellHover,
     cellSelected,
-    drag
+    drag,
+    storage
   };
 });
 

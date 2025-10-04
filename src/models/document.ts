@@ -56,4 +56,8 @@ export class Document {
       newCell.parent = undefined;
     }
   }
+
+  toJson() {
+    return this.list.map(item => item.toJson());
+  }
 }

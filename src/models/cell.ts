@@ -62,4 +62,13 @@ export class Cell {
   copy() {
     return new Cell(this.type, this.name);
   }
+
+  toJson() {
+    return {
+      cId: this._cId,
+      type: this._type,
+      name: this._name,
+      children: this.children.map(item => item.toJson())
+    };
+  }
 }

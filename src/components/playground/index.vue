@@ -21,6 +21,7 @@
         <component-block v-if='activeBlock === "component"' />
         <logic-block v-else-if='activeBlock === "logic"' />
         <style-board v-else-if='activeBlock === "style"' />
+        <layer-block v-else-if='activeBlock === "layer"' />
       </template>
     </layout>
   </div>
@@ -37,6 +38,7 @@ import LogicBlock from '../blocks/logic/index.vue';
 import DrawingBoard from '../drawing-board/index.vue';
 import StyleBoard from '../blocks/style/index.vue';
 import SizeTabs from './size-tabs.vue';
+import LayerBlock from '../blocks/layer/index.vue';
 
 const { playground, refreshFlag, boardSize } = useStore()!;
 const style = {

@@ -6,4 +6,8 @@ export class Logic extends Cell {
   constructor(options: LogicConstructorOptions) {
     super(CELL_TYPE.LOGIC, options.name);
   }
+
+  toJson() {
+    return { ...super.toJson() };
+  }
 }

@@ -19,4 +19,14 @@ export class Component extends Cell {
     super(CELL_TYPE.COMPONENT, options.name);
     this.innerHtml = options.innerHtml;
   }
+
+  toJson() {
+    return {
+      ...super.toJson(),
+      style: this.style,
+      classes: this.classes,
+      id: this.id,
+      innerHtml: this.innerHtml
+    };
+  }
 }
