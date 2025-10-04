@@ -21,8 +21,20 @@ export class Document {
     return result;
   }
 
+  removeById(id: string) {
+    const cell = this.getByCId(id)!;
+    if (cell.parent) {
+      cell.parent.removeChildById(id);
+    } else {
+      // const index = this.list.findIndex(item => item.cId === id);
+      // this.list.splice(index, 1);
+      this.list = this.list.filter(item => item.cId !== id);
+    }
+  }
+
   appendChild(cell: Cell) {
     this.list.push(cell);
+    cell.parent = undefined;
   }
 
   insertBefore(newCell: Cell, referenceCell: Cell | null) {
@@ -31,6 +43,7 @@ export class Document {
     } else {
       const index = this.list.findIndex(item => item.cId === referenceCell.cId);
       this.list.splice(index, 0, newCell);
+      newCell.parent = undefined;
     }
   }
 
@@ -40,6 +53,7 @@ export class Document {
     } else {
       const index = this.list.findIndex(item => item.cId === referenceCell.cId);
       this.list.splice(index + 1, 0, newCell);
+      newCell.parent = undefined;
     }
   }
 }

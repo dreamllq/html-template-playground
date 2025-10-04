@@ -4,7 +4,12 @@ import { CELL_TYPE } from '@/types/common';
 import { ComponentConstructorOptions } from '@/types/component';
 
 export class Component extends Cell {
-  style: CSSProperties = { padding: '10px' };
+  style: CSSProperties = {
+    paddingTop: '10px',
+    paddingRight: '10px',
+    paddingBottom: '10px',
+    paddingLeft: '10px' 
+  };
   classes: string[] = [];
   id: string = '';
   innerHtml: string = '';

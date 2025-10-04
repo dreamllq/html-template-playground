@@ -50,4 +50,12 @@ export class Cell {
       newCell.parent = this;
     }
   }
+
+  removeChildById(id: string) {
+    this.children = this.children.filter(item => item.cId !== id);
+  }
+
+  copy() {
+    return new Cell(this.type, this.name);
+  }
 }

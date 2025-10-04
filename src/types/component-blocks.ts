@@ -1,6 +1,8 @@
 import { Component } from '@/models/component';
 
-export type ComponentClass = typeof Component;
+class A {}
+
+export type ComponentClass = typeof A;
 
 export type ComponentBlockItem = {
   $class: ComponentClass;

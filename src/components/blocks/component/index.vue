@@ -17,15 +17,16 @@
 import { useStore } from '@/components/store';
 import { ComponentBlockItem } from '@/types/component-blocks';
 
-const { playground, dragBlock } = useStore()!;
+const { playground, dragBlock, dragType } = useStore()!;
 
 const onDragstart = (item: ComponentBlockItem) => {
   // console.log('onDragstart', e);
+  dragType.value = 'new';
   dragBlock.value = item;
 };
 
 const onDragend = (e:DragEvent) => {
-  console.log('onDragend', e);
+  // console.log('onDragend', e);
 };
 
 const onDrag = (e:DragEvent) => {

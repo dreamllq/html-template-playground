@@ -25,10 +25,10 @@
       <div class='tag-item'>
         <el-icon><rank /></el-icon>
       </div>
-      <div class='tag-item'>
+      <div class='tag-item' @click='onCopy'>
         <el-icon><copy-document /></el-icon>
       </div>
-      <div class='tag-item'>
+      <div class='tag-item' @click='onDelete'>
         <el-icon><delete /></el-icon>
       </div>
     </div>
@@ -39,8 +39,22 @@
 import { useStore } from '@/components/store';
 import { Top, Rank, CopyDocument, Delete } from '@element-plus/icons-vue';
 
-const { cellSelected: { selected, selectedTag } } = useStore()!;
+const { cellSelected: { selected, selectedTag, selectedCell }, playground, refresh } = useStore()!;
 
+const onCopy = () => {
+  if (selectedCell.value!.parent) {
+    selectedCell.value!.parent?.insertAfter(selectedCell.value!.copy(), selectedCell.value!);
+  } else {
+    playground.drawingBoard.document.insertAfter(selectedCell.value!.copy(), selectedCell.value!);
+  }
+  refresh();
+};
+
+const onDelete = () => {
+  playground.drawingBoard.document.removeById(selectedCell.value!.cId);
+  selectedCell.value = undefined;
+  refresh();
+};
 </script>
 
 <style scoped lang="scss">

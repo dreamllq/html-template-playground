@@ -6,7 +6,9 @@ export const useDrag = ({
   containerRef,
   bottomRef 
 }) => {
-  const { playground, dragBlock, refresh } = useStore()!;
+  const {
+    playground, dragBlock, refresh, dragType, dragCell
+  } = useStore()!;
   const placeholder = ref({
     left: '0',
     top: '0',
@@ -14,7 +16,7 @@ export const useDrag = ({
   });
 
   const calculateDragCellInfo = (e:DragEvent) => {
-    const data = e.target!.dataset as DOMStringMap;
+    const data = (e.target! as HTMLElement).dataset as DOMStringMap;
     const { cid, container } = data;
     /**
    * 容器边界值，如果在距离上下左右边界值10px以内的话，则拖拽元素放在当前target对应的上下左右位置，否则放在容器里面
@@ -25,18 +27,20 @@ export const useDrag = ({
     let position = 'none';
 
     if (!container) {
-      referenceCell = playground.drawingBoard.document.getByCId(cid!)!;
-      const rect = e.target!.getBoundingClientRect() as DOMRect;
+      const cell = playground.drawingBoard.document.getByCId(cid!)!;
+      const rect = (e.target! as Element).getBoundingClientRect() as DOMRect;
 
       if (e.offsetY > 0 && e.offsetY < 10) {
         position = 'up';
-        targetCell = referenceCell.parent;
+        targetCell = cell.parent;
+        referenceCell = cell;
       } else if (e.offsetY < rect.height && e.offsetY > rect.height - 10) {
         position = 'down';
-        targetCell = referenceCell.parent;
+        targetCell = cell.parent;
+        referenceCell = cell;
       } else {
         position = 'none';
-        targetCell = referenceCell;
+        targetCell = cell;
         referenceCell = undefined;
       }
     }
@@ -96,11 +100,36 @@ export const useDrag = ({
     const { targetCell, referenceCell, position } = calculateDragCellInfo(e);
     console.log(targetCell, referenceCell, position);
     
-    const blockClass = dragBlock.value!.$class;
+    if (dragType.value === 'new') {
+      const blockClass = dragBlock.value!.$class;
+      const cell = new blockClass();
+      console.log(cell);
+      insertCell(cell, {
+        targetCell,
+        referenceCell,
+        position 
+      });
+      refresh();
+      dragType.value = '';
+      dragBlock.value = undefined;
+    } else if (dragType.value === 'move') {
+      console.log(dragCell.value!.cId);
+      
+      playground.drawingBoard.document.removeById(dragCell.value!.cId);
+      insertCell(dragCell.value!, {
+        targetCell,
+        referenceCell,
+        position 
+      });
+      refresh();
+      dragType.value = '';
+      dragCell.value = undefined;
+    }
+    
+  };
 
-    const cell = new blockClass();
-    console.log(cell);
-    // playground.drawingBoard.document.list.push(cell);
+  const insertCell = (cell, options:{targetCell?:Cell, referenceCell?:Cell, position: string}) => {
+    const { targetCell, referenceCell, position } = options;
     if (targetCell) {
       if (referenceCell) {
         if (position === 'up') {
@@ -123,7 +152,6 @@ export const useDrag = ({
         playground.drawingBoard.document.appendChild(cell);
       }
     }
-    refresh();
   };
 
   return {

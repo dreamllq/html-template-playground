@@ -2,11 +2,19 @@
   <component-render
     v-if='cell.type === CELL_TYPE.COMPONENT'
     class='cell-outline'
+    :class='{
+      "cell-freeze": dragCell?.cId === cell.cId
+    }'
     :data-cid='cell.cId'
     data-cell='1'
     data-component='1'
     :component='(cell as Component)'
-    @click.stop='onClick'>
+    draggable='true'
+    @click.stop='onClick'
+    @dragstart.prevent.stop='onDragstart'
+    @dragend='onDragend'
+    @drag='onDrag'
+  >
     <template v-if='cell.children.length>0'>
       <template v-for='item in cell.children' :key='item.cId'>
         <cell-render :cell='item' @select='onSelect' />
@@ -17,6 +25,9 @@
   <logic-render 
     v-else-if='cell.type === CELL_TYPE.LOGIC'
     class='cell-outline'
+    :class='{
+      "cell-freeze": dragCell?.cId === cell.cId
+    }'
     :data-cid='cell.cId'
     data-cell='1'
     data-logic='1'
@@ -50,7 +61,7 @@ const props = defineProps({
 
 const emits = defineEmits(['select']);
 
-const { cellSelected: { select } } = useStore()!;
+const { cellSelected: { select }, dragType, dragCell } = useStore()!;
 
 
 const onClick = () => {
@@ -60,11 +71,33 @@ const onClick = () => {
 const onSelect = (cell:Cell) => {
   emits('select', cell);
 };
+
+const onDragstart = () => {
+  dragType.value = 'move';
+  dragCell.value = props.cell;
+};
+
+const onDragend = () => {
+  console.log('onDragend');
+  
+  // dragType.value = '';
+  // dragCell.value = undefined;
+};
+
+const onDrag = (e) => {
+  
+};
 </script>
 
 <style scoped lang="scss">
 .cell-outline{
   outline: 1px dashed rgba(170, 170, 170, 0.7);
   outline-offset: -2px;
+}
+
+.cell-freeze {
+  opacity: .5;
+  filter: alpha(opacity=50);
+  pointer-events: none
 }
 </style>

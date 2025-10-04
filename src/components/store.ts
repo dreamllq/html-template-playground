@@ -9,11 +9,14 @@ import SpanRender from './drawing-board/span-render.vue';
 import { ComponentBlockItem } from '@/types/component-blocks';
 import { useCellHover } from './drawing-board/tools/use-hover';
 import { useCellSelected } from './drawing-board/tools/use-selected';
+import { Cell } from '@/models/cell';
 
 const [useProvideStore, useStore] = createInjectionState(() => {
 
   const playground = new Playground();
   const drawingBoardId = ref('htp-db-kdk');
+  const dragType = ref('');
+  const dragCell = ref<Cell>();
   const dragBlock = ref<ComponentBlockItem | undefined>(undefined);
   const refreshFlag = ref(false);
   const cellHover = useCellHover({ playground });
@@ -75,11 +78,15 @@ const [useProvideStore, useStore] = createInjectionState(() => {
     refreshFlag.value = false;
     await nextTick();
     cellSelected.refresh();
+    console.log(playground);
+    
   };
   return {
     playground,
     drawingBoardId,
+    dragType,
     dragBlock,
+    dragCell,
     refresh,
     refreshFlag,
     cellHover,

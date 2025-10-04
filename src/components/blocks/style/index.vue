@@ -5,7 +5,7 @@
     </div>
     <el-divider />
     <el-row :gutter='12'>
-      <el-col :span='12'>
+      <el-col :span='24'>
         <style-item label='Classes'>
           <el-input clearable />
         </style-item>
@@ -15,9 +15,13 @@
     <el-divider />
 
     <el-row :gutter='12'>
-      <el-col :span='12'>
+      <el-col :span='24'>
         <style-item label='innerHtml'>
-          <el-input v-model='innerHtml' clearable @blur='onInnerHtmlChange' />
+          <el-input
+            v-model='innerHtml'
+            clearable
+            type='textarea'
+            @blur='onInnerHtmlChange' />
         </style-item>
       </el-col>
     </el-row>

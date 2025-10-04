@@ -10,7 +10,9 @@
     @drop.prevent='onDrop'
     @mouseenter='onMouseenter'
     @mouseleave='onMouseleave'
-    @mouseover='onMouseover'
+    @mouseover.prevent.stop='onMouseover'
+    @mousemove='onMousemove'
+    @mouseup='onMouseup'
   >
     <page-render @select='onSelect' />
     <div ref='bottomRef' />
@@ -39,7 +41,9 @@ import { useDrag } from './use-drag';
 import CellHover from './tools/cell-hover.vue';
 import CellSelected from './tools/cell-selected.vue';
 
-const { cellHover: { mouseenter, mouseleave, mouseover }, cellSelected: { select }, drawingBoardId } = useStore()!;
+const {
+  cellHover: { mouseenter, mouseleave, mouseover }, cellSelected: { select }, drawingBoardId, dragType, dragCell
+} = useStore()!;
 
 const containerRef = ref();
 const bottomRef = ref();
@@ -56,7 +60,17 @@ const {
 });
 
 const onMouseover = (e:MouseEvent) => {
-  mouseover(e, { containerRef });
+  if (dragType.value !== '') {
+    return;
+  } else {
+    mouseover(e, { containerRef });
+  }
+};
+
+const onMousemove = (e) => {
+  if (dragType.value === 'move') {
+    onDragover(e);
+  }
 };
 
 const onMouseenter = (e:MouseEvent) => {
@@ -64,11 +78,19 @@ const onMouseenter = (e:MouseEvent) => {
 };
 
 const onMouseleave = (e:MouseEvent) => {
-  mouseleave(e);
+  mouseleave();
+};
+
+const onMouseup = (e) => {
+  if (dragType.value === 'move') {
+    onDrop(e);
+    dragType.value = '';
+    dragCell.value = undefined;
+  }
 };
 
 const onSelect = (cell:Cell) => {
-  select(cell, { containerRef });
+  select(cell);
 };
 
 </script>
