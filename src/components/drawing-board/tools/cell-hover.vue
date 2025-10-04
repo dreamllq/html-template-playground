@@ -19,7 +19,7 @@
         left: cellTag.left,
         top: cellTag.top
       }'>
-      {{ cell.name }}
+      {{ cell.info }}
     </div>
   </div>
 </template>
@@ -62,6 +62,7 @@ const {
     position: absolute;
     padding: 0 5px;
     pointer-events: none;
+    white-space: nowrap;
   }
 }
 </style>

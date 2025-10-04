@@ -26,6 +26,10 @@ export class Cell {
     return this._name;
   }
 
+  get info () {
+    return this._name;
+  }
+
   appendChild(cell: Cell) {
     this.children.push(cell);
     cell.parent = this;

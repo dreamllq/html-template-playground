@@ -1,6 +1,8 @@
 import { Logic } from '@/models/logic';
 
-export type LogicClass = typeof Logic;
+class A {}
+
+export type LogicClass = typeof A;
 
 export type LogicBlockItem = {
   $class: LogicClass;

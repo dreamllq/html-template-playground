@@ -2,7 +2,14 @@
   <div :style='style'>
     <layout>
       <template #toolbar>
-        1
+        <div style='display: flex;'>
+          <div style='flex: 1'>
+            <size-tabs :default-active='boardSize' @change='(val)=>boardSize = val' />
+          </div>
+          <div style='flex: none'>
+            2
+          </div>
+        </div>
       </template>
       <template #drawing-board>
         <drawing-board v-if='!refreshFlag' />
@@ -29,8 +36,9 @@ import ComponentBlock from '../blocks/component/index.vue';
 import LogicBlock from '../blocks/logic/index.vue';
 import DrawingBoard from '../drawing-board/index.vue';
 import StyleBoard from '../blocks/style/index.vue';
+import SizeTabs from './size-tabs.vue';
 
-const { playground, refreshFlag } = useStore()!;
+const { playground, refreshFlag, boardSize } = useStore()!;
 const style = {
   width: playground.width,
   height: playground.height

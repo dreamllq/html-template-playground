@@ -1,7 +1,7 @@
 <template>
   <component-render
     v-if='cell.type === CELL_TYPE.COMPONENT'
-    class='cell-outline'
+    class='cell-outline component'
     :class='{
       "cell-freeze": dragCell?.cId === cell.cId
     }'
@@ -24,7 +24,7 @@
 
   <logic-render 
     v-else-if='cell.type === CELL_TYPE.LOGIC'
-    class='cell-outline'
+    class='cell-outline logic'
     :class='{
       "cell-freeze": dragCell?.cId === cell.cId
     }'
@@ -32,7 +32,11 @@
     data-cell='1'
     data-logic='1'
     :logic='(cell as Logic)'
-    @click='onClick'>
+    draggable='true'
+    @click.stop='onClick'
+    @dragstart.prevent.stop='onDragstart'
+    @dragend='onDragend'
+    @drag='onDrag'>
     <template v-if='cell.children.length>0'>
       <template v-for='item in cell.children' :key='item.cId'>
         <cell-render :cell='item' @select='onSelect' />
@@ -93,6 +97,10 @@ const onDrag = (e) => {
 .cell-outline{
   outline: 1px dashed rgba(170, 170, 170, 0.7);
   outline-offset: -2px;
+
+  &.logic{
+    outline-width: 2px;
+  }
 }
 
 .cell-freeze {

@@ -3,6 +3,10 @@
     :id='drawingBoardId'
     ref='containerRef'
     class='drawing-border' 
+    :class='{
+      "size-pc": boardSize === "pc",
+      "size-a4": boardSize === "a4"
+    }'
     data-container='1'
     @dragenter.prevent='onDragenter'
     @dragleave.prevent='onDragleave'
@@ -15,17 +19,9 @@
     @mouseup='onMouseup'
   >
     <page-render @select='onSelect' />
-    <div ref='bottomRef' />
+    <!-- <div ref='bottomRef' /> -->
     <div class='tool'>
-      <div
-        class='cell-placeholder horizontal'
-        :style='{
-          left: placeholder.left,
-          top:placeholder.top,
-          width:placeholder.width
-        }'>
-        <div class='cell-placeholder-init' />  
-      </div>
+      <cell-placeholder />
       <cell-hover />
       <cell-selected />
     </div>
@@ -40,24 +36,17 @@ import { Cell } from '@/models/cell';
 import { useDrag } from './use-drag';
 import CellHover from './tools/cell-hover.vue';
 import CellSelected from './tools/cell-selected.vue';
+import CellPlaceholder from './tools/cell-placeholder.vue';
 
 const {
-  cellHover: { mouseenter, mouseleave, mouseover }, cellSelected: { select }, drawingBoardId, dragType, dragCell
+  cellHover: { mouseenter, mouseleave, mouseover }, 
+  cellSelected: { select }, drawingBoardId, dragType, dragCell, boardSize,
+  drag: {
+    onDragenter, onDragleave, onDragover, onDrop, placeholder 
+  }
 } = useStore()!;
 
 const containerRef = ref();
-const bottomRef = ref();
-
-const {
-  onDragenter,
-  onDragleave,
-  onDragover,
-  onDrop,
-  placeholder
-} = useDrag({
-  containerRef,
-  bottomRef 
-});
 
 const onMouseover = (e:MouseEvent) => {
   if (dragType.value !== '') {
@@ -100,6 +89,21 @@ const onSelect = (cell:Cell) => {
   min-height: 100%;
   position: relative;
 
+  &.size-pc{
+    background: white;
+    width: 100%;
+  }
+
+  &.size-a4{
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto;
+    padding: 20mm;
+    box-sizing: border-box;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
   .tool{
     height: 0;
     width: 0;
@@ -107,34 +111,6 @@ const onSelect = (cell:Cell) => {
     top: 0;
     left: 0;
   }
-
-  .cell-placeholder{
-    position: absolute;
-    z-index: 10;
-    pointer-events: none;
-    // display: none;
-    border-style: solid !important;
-    outline: none;
-    box-sizing: border-box;
-
-    &.horizontal{
-      border-color: rgba(0, 0, 0, 0) #62c462;
-      border-width: 3px 5px;
-      margin: -3px 0 0;
-      height: auto;
-    }
-
-    .cell-placeholder-init{
-      background-color: #62c462;
-      box-shadow: 0 0 3px rgba(0, 0, 0, .2);
-      height: 100%;
-      width: 100%;
-      pointer-events: none;
-      padding: 1.5px;
-      outline: none;
-    }
-  }
-
 
 }
 </style>

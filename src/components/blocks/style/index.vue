@@ -350,6 +350,80 @@
         </style-item>
       </el-col>
     </el-row>
+
+    <el-divider />
+
+    <el-row :gutter='12'>
+      <el-col :span='12'>
+        <style-item label='Flex'>
+          <el-input v-model='css.flex' clearable @blur='onChange' />
+        </style-item>
+      </el-col>
+    </el-row>
+    
+
+    <el-row :gutter='12'>
+      <el-col :span='12'>
+        <style-item label='Flex direction'>
+          <el-select-v2
+            v-model='css.flexDirection'
+            clearable
+            :options='[
+              {value:"row", label:"row"},
+              {value:"row-reverse", label:"row-reverse"},
+              {value:"column", label:"column"},
+              {value:"column-reverse", label:"column-reverse"},
+            ]' 
+            @change='onChange' />
+        </style-item>
+      </el-col>
+      <el-col :span='12'>
+        <style-item label='Flex justifyContent'>
+          <el-select-v2
+            v-model='css.justifyContent'
+            clearable
+            :options='[
+              {value:"start", label:"start"},
+              {value:"end", label:"end"},
+              {value:"space-between", label:"space-between"},
+              {value:"space-around", label:"space-around"},
+              {value:"center", label:"center"},
+            ]' 
+            @change='onChange' />
+        </style-item>
+      </el-col>
+    </el-row>
+
+    <el-row :gutter='12'>
+      <el-col :span='12'>
+        <style-item label='Flex alignContent'>
+          <el-select-v2
+            v-model='css.alignContent'
+            clearable
+            :options='[
+              {value:"start", label:"start"},
+              {value:"end", label:"end"},
+              {value:"stretch", label:"stretch"},
+              {value:"center", label:"center"},
+            ]' 
+            @change='onChange' />
+        </style-item>
+      </el-col>
+      <el-col :span='12'>
+        <style-item label='Flex alignItems'>
+          <el-select-v2
+            v-model='css.alignItems'
+            clearable
+            :options='[
+              {value:"start", label:"start"},
+              {value:"end", label:"end"},
+              {value:"stretch", label:"stretch"},
+              {value:"center", label:"center"},
+            ]' 
+            @change='onChange' />
+        </style-item>
+      </el-col>
+    </el-row>
   </div>
 </template>
 

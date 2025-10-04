@@ -4,14 +4,21 @@ import { createInjectionState } from '@vueuse/core';
 import { computed, nextTick, ref, shallowRef } from 'vue';
 import { Div } from '@/models/components/div';
 import { Span } from '@/models/components/span';
-import DivRender from './drawing-board/div-render.vue';
-import SpanRender from './drawing-board/span-render.vue';
+import DivRender from './drawing-board/component/div-render.vue';
+import SpanRender from './drawing-board/component/span-render.vue';
 import { ComponentBlockItem } from '@/types/component-blocks';
 import { useCellHover } from './drawing-board/tools/use-hover';
 import { useCellSelected } from './drawing-board/tools/use-selected';
 import { Cell } from '@/models/cell';
+import { For } from '@/models/logics/for';
+import ForRender from './drawing-board/logic/for-render.vue';
+import { If } from '@/models/logics/if';
+import IfRender from './drawing-board/logic/if-render.vue';
+import { useDrag } from './drawing-board/use-drag';
 
 const [useProvideStore, useStore] = createInjectionState(() => {
+
+  const boardSize = ref('pc');
 
   const playground = new Playground();
   const drawingBoardId = ref('htp-db-kdk');
@@ -19,6 +26,24 @@ const [useProvideStore, useStore] = createInjectionState(() => {
   const dragCell = ref<Cell>();
   const dragBlock = ref<ComponentBlockItem | undefined>(undefined);
   const refreshFlag = ref(false);
+
+  const refresh = async () => {
+    refreshFlag.value = true;
+    await nextTick();
+    refreshFlag.value = false;
+    await nextTick();
+    cellSelected.refresh();
+    console.log(playground);
+  };
+
+  const drag = useDrag({
+    playground,
+    drawingBoardId,
+    dragBlock,
+    refresh,
+    dragType,
+    dragCell
+  });
   const cellHover = useCellHover({ playground });
   const cellSelected = useCellSelected({
     playground,
@@ -42,6 +67,24 @@ const [useProvideStore, useStore] = createInjectionState(() => {
         <path fill="currentColor" d="M2 20h8V4H2v16Zm-1 0V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1ZM13 20h8V4h-8v16Zm-1 0V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1Z"/>
         </svg>`,
     render: SpanRender
+  });
+
+  playground.logicBlocks.list.push({
+    $class: For,
+    name: 'for',
+    svg: `<svg viewBox="0 0 23 24">
+        <path fill="currentColor" d="M2 20h8V4H2v16Zm-1 0V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1ZM13 20h8V4h-8v16Zm-1 0V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1Z"/>
+        </svg>`,
+    render: ForRender
+  });
+
+  playground.logicBlocks.list.push({
+    $class: If,
+    name: 'if',
+    svg: `<svg viewBox="0 0 23 24">
+        <path fill="currentColor" d="M2 20h8V4H2v16Zm-1 0V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1ZM13 20h8V4h-8v16Zm-1 0V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1Z"/>
+        </svg>`,
+    render: IfRender
   });
 
   const div1 = new Div();
@@ -72,17 +115,9 @@ const [useProvideStore, useStore] = createInjectionState(() => {
 
   console.log(playground);
 
-  const refresh = async () => {
-    refreshFlag.value = true;
-    await nextTick();
-    refreshFlag.value = false;
-    await nextTick();
-    cellSelected.refresh();
-    console.log(playground);
-    
-  };
   return {
     playground,
+    boardSize,
     drawingBoardId,
     dragType,
     dragBlock,
@@ -90,7 +125,8 @@ const [useProvideStore, useStore] = createInjectionState(() => {
     refresh,
     refreshFlag,
     cellHover,
-    cellSelected
+    cellSelected,
+    drag
   };
 });
 

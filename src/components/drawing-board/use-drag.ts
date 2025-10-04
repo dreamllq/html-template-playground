@@ -3,24 +3,54 @@ import { useStore } from '../store';
 import { ref } from 'vue';
 
 export const useDrag = ({
-  containerRef,
-  bottomRef 
+  playground,
+  drawingBoardId,
+  dragBlock, refresh, dragType, dragCell
 }) => {
-  const {
-    playground, dragBlock, refresh, dragType, dragCell
-  } = useStore()!;
   const placeholder = ref({
     left: '0',
     top: '0',
-    width: '0'
+    width: '0',
+    display: 'none'
   });
 
+  const parentPlaceholder = ref({
+    left: '0',
+    top: '0',
+    width: '0',
+    height: '0',
+    display: 'none'
+  });
+
+  const findAvailableTarget = (target : HTMLElement) => {
+    const { cell } = target.dataset;
+    if (cell) {
+      return target;
+    } else {
+      const parent = target.parentElement;
+      if (parent) {
+        return findAvailableTarget(target.parentElement as HTMLElement);
+      } else {
+        return undefined;
+      }
+    }
+  };
+
   const calculateDragCellInfo = (e:DragEvent) => {
-    const data = (e.target! as HTMLElement).dataset as DOMStringMap;
-    const { cid, container } = data;
+    const availableTarget = findAvailableTarget(e.target as HTMLElement);
+    let cid:string | undefined = undefined;
+    let container:string | undefined = undefined;
+    if (availableTarget) {
+      const data = (e.target! as HTMLElement).dataset;
+      cid = data.cid;
+      container = data.container;
+    }
+
+    // const data = (e.target! as HTMLElement).dataset as DOMStringMap;
+    // const { cid, container } = data;
     /**
-   * 容器边界值，如果在距离上下左右边界值10px以内的话，则拖拽元素放在当前target对应的上下左右位置，否则放在容器里面
-   */
+     * 容器边界值，如果在距离上下左右边界值10px以内的话，则拖拽元素放在当前target对应的上下左右位置，否则放在容器里面
+     */
 
     let targetCell: Cell | undefined = undefined;
     let referenceCell: Cell | undefined = undefined;
@@ -62,9 +92,9 @@ export const useDrag = ({
   
   };
 
-  const onDragover = (e:DragEvent) => {
-    const { targetCell, referenceCell, position } = calculateDragCellInfo(e);
-    const containerRect = containerRef.value.getBoundingClientRect() as DOMRect;
+  const calculatePlaceholder = ({ targetCell, referenceCell, position }) => {
+    const containerRef = document.querySelector(`#${drawingBoardId.value}`)!;
+    const containerRect = containerRef.getBoundingClientRect() as DOMRect;
 
     if (referenceCell) {
       if (position === 'up') {
@@ -87,18 +117,48 @@ export const useDrag = ({
       placeholder.value.top = `${rect.top - containerRect.top + 5}px`;
       placeholder.value.width = `${rect.width - 10}px`;
     } else {
-      const target = containerRef.value;
+      const target = containerRef;
       const rect = target!.getBoundingClientRect() as DOMRect;
       placeholder.value.left = `${rect.left - containerRect.left}px`;
       placeholder.value.top = `${rect.top - containerRect.top}px`;
       placeholder.value.width = `${rect.width}px`;
+      placeholder.value.display = 'block';
+    };
+    placeholder.value.display = 'block';
+  };
+
+  const calculateParentPlaceholder = ({ targetCell }) => {
+    if (targetCell) {
+      const containerRef = document.querySelector(`#${drawingBoardId.value}`)!;
+      const containerRect = containerRef.getBoundingClientRect() as DOMRect;
+      const target = document.querySelector(`[data-cid="${targetCell.cId}"]`);
+      const rect = target!.getBoundingClientRect() as DOMRect;
+      parentPlaceholder.value.width = `${rect.width}px`;
+      parentPlaceholder.value.height = `${rect.height}px`;
+      parentPlaceholder.value.top = `${rect.top - containerRect.top}px`;
+      parentPlaceholder.value.left = `${rect.left - containerRect.left}px`;
+      parentPlaceholder.value.display = 'block';
+    } else {
+      parentPlaceholder.value.display = 'none';
     }
+  };
+
+  const onDragover = (e:DragEvent) => {
+    const { targetCell, referenceCell, position } = calculateDragCellInfo(e);
+    calculatePlaceholder({
+      targetCell,
+      referenceCell,
+      position 
+    });
+    calculateParentPlaceholder({ targetCell });
   };
 
   const onDrop = (e:DragEvent) => {
     console.log('onDrop', e);
     const { targetCell, referenceCell, position } = calculateDragCellInfo(e);
     console.log(targetCell, referenceCell, position);
+    placeholder.value.display = 'none';
+    parentPlaceholder.value.display = 'none';
     
     if (dragType.value === 'new') {
       const blockClass = dragBlock.value!.$class;
@@ -156,6 +216,7 @@ export const useDrag = ({
 
   return {
     placeholder,
+    parentPlaceholder,
     onDragenter,
     onDragleave,
     onDragover,
