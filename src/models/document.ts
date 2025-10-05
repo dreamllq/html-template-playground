@@ -1,4 +1,6 @@
+import { CELL_TYPE } from '@/types/common';
 import { Cell } from './cell';
+import { FlatItem } from '@/types/cell';
 
 const walk = (list:Cell[], cb:(cell:Cell)=>void) => {
   list.forEach(item => {
@@ -9,6 +11,10 @@ const walk = (list:Cell[], cb:(cell:Cell)=>void) => {
 
 export class Document {
   list: Cell[] = [];
+
+  flat() {
+    return this.list.reduce<FlatItem[]>((acc, item) => [...acc, ...item.flat()], []);
+  }
 
   getByCId(id: string):Cell | undefined {
     let result:Cell | undefined = undefined;

@@ -11,6 +11,14 @@
     <div
       class='tab-item'
       :class='{
+        selected: active === "setting"
+      }'
+      @click='onSelect("setting")'>
+      <el-icon><setting /></el-icon>
+    </div>
+    <div
+      class='tab-item'
+      :class='{
         selected: active === "layer"
       }'
       @click='onSelect("layer")'>
@@ -36,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { Menu as MenuIcon, Operation, Brush, Money } from '@element-plus/icons-vue';
+import { Menu as MenuIcon, Operation, Brush, Money, Setting } from '@element-plus/icons-vue';
 import { onMounted, ref } from 'vue';
 
 const props = defineProps({

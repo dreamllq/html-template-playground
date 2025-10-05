@@ -16,7 +16,10 @@ export class Component extends Cell {
   
 
   constructor(options: ComponentConstructorOptions) {
-    super(CELL_TYPE.COMPONENT, options.name);
+    super({
+      type: CELL_TYPE.COMPONENT,
+      name: options.name 
+    });
     this.innerHtml = options.innerHtml;
   }
 

@@ -2,8 +2,8 @@ import { Cell } from '@/models/cell';
 import { Playground } from '@/models/playground';
 import { Ref, ref } from 'vue';
 
-export const useCellHover = (options:{playground:Playground}) => {
-  const { playground } = options;
+export const useCellHover = (options:{playground:Playground, drawingBoardId:Ref<string>}) => {
+  const { playground, drawingBoardId } = options;
   const hover = ref({
     width: '0',
     height: '0',
@@ -20,17 +20,40 @@ export const useCellHover = (options:{playground:Playground}) => {
   const cell = ref<Cell | undefined>();
   const cellTagPosition = ref('top');
 
-  const mouseover = (e:any, options:{containerRef:Ref}) => {
-    const { containerRef } = options;
+  const mouseover = (e:any) => {
+    // const { containerRef } = options;
     const data = e.target!.dataset as DOMStringMap;
     if (!data.cell) {
       hover.value.display = 'none';
       return;
     };
-    const rect = e.target!.getBoundingClientRect() as DOMRect;
-    const containerRect = containerRef.value.getBoundingClientRect() as DOMRect;
+    // const rect = e.target!.getBoundingClientRect() as DOMRect;
+    // const containerRect = containerRef.value.getBoundingClientRect() as DOMRect;
     
-    cell.value = playground.drawingBoard.document.getByCId(data.cid!);
+    // cell.value = playground.drawingBoard.document.getByCId(data.cid!);
+
+    // hover.value.width = `${rect.width}px`;
+    // hover.value.height = `${rect.height}px`;
+    // hover.value.top = `${rect.top - containerRect.top}px`;
+    // hover.value.left = `${rect.left - containerRect.left}px`;
+    // hover.value.display = 'block';
+
+    // cellTag.value.left = `${rect.left - containerRect.left}px`;
+    // if (rect.top - containerRect.top > 20) {
+    //   cellTag.value.top = `${rect.top - containerRect.top - 18}px`;
+    // } else {
+    //   cellTag.value.top = `${rect.top - containerRect.top + rect.height}px`;
+    // }
+
+    mouseoverCell(playground.drawingBoard.document.getByCId(data.cid!));
+  };
+
+  const mouseoverCell = (_cell) => {
+    cell.value = _cell;
+    const target = document.querySelector(`[data-cid="${_cell.cId}"]`)!;
+    const rect = target.getBoundingClientRect() as DOMRect;
+    const container = document.querySelector(`#${drawingBoardId.value}`)!;
+    const containerRect = container.getBoundingClientRect() as DOMRect;
 
     hover.value.width = `${rect.width}px`;
     hover.value.height = `${rect.height}px`;
@@ -60,6 +83,7 @@ export const useCellHover = (options:{playground:Playground}) => {
     cellTagPosition,
     cellTag,
     mouseover,
+    mouseoverCell,
     mouseenter,
     mouseleave
   };

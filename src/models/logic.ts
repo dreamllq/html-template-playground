@@ -4,7 +4,10 @@ import { LogicConstructorOptions } from '@/types/logic';
 
 export class Logic extends Cell {
   constructor(options: LogicConstructorOptions) {
-    super(CELL_TYPE.LOGIC, options.name);
+    super({
+      type: CELL_TYPE.LOGIC,
+      name: options.name 
+    });
   }
 
   toJson() {

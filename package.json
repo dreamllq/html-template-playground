@@ -81,5 +81,9 @@
   "keywords": [
     "vue",
     "vue3"
-  ]
+  ],
+  "dependencies": {
+    "monaco-editor": "^0.53.0",
+    "vue3-print-nb": "^0.1.4"
+  }
 }

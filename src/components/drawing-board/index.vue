@@ -52,7 +52,7 @@ const onMouseover = (e:MouseEvent) => {
   if (dragType.value !== '') {
     return;
   } else {
-    mouseover(e, { containerRef });
+    mouseover(e);
   }
 };
 

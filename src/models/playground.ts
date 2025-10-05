@@ -21,6 +21,7 @@ export class Playground {
       if (!block) return;
       const CClass = block.$class;
       const itemComponent = new CClass();
+      itemComponent.cId = item.cId;
       itemComponent.style = item.style;
       itemComponent.classes = item.classes;
       itemComponent.id = item.id;
@@ -40,6 +41,7 @@ export class Playground {
       if (!block) return;
       const LClass = block.$class;
       const itemLogic = new LClass();
+      itemLogic.cId = item.cId;
       if (item.name === 'for') {
         itemLogic.alias0 = item.alias0;
         itemLogic.alias1 = item.alias1;

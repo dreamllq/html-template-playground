@@ -20,6 +20,7 @@ import { useStorage } from './storage';
 const [useProvideStore, useStore] = createInjectionState(() => {
 
   const boardSize = ref('a4');
+  const toolBar = ref('edit');
 
   const playground = new Playground();
   const drawingBoardId = ref('htp-db-kdk');
@@ -46,7 +47,10 @@ const [useProvideStore, useStore] = createInjectionState(() => {
     dragType,
     dragCell
   });
-  const cellHover = useCellHover({ playground });
+  const cellHover = useCellHover({
+    playground,
+    drawingBoardId 
+  });
   const cellSelected = useCellSelected({
     playground,
     drawingBoardId 
@@ -126,6 +130,7 @@ const [useProvideStore, useStore] = createInjectionState(() => {
 
   return {
     playground,
+    toolBar,
     boardSize,
     drawingBoardId,
     dragType,

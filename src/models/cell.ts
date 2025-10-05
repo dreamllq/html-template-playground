@@ -1,3 +1,4 @@
+import { FlatItem } from '@/types/cell';
 import { CELL_TYPE } from '@/types/common';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -8,10 +9,18 @@ export class Cell {
   parent?:Cell;
   private _name: string = '';
 
-  constructor(type:CELL_TYPE, name:string) {
-    this._cId = uuidv4();
-    this._type = type;
-    this._name = name;
+  constructor(data: {type:CELL_TYPE, name:string, cId?:string}) {
+    this._cId = data.cId || uuidv4();
+    this._type = data.type;
+    this._name = data.name;
+  }
+
+  get deep(): number {
+    if (this.parent) {
+      return this.parent.deep + 1;
+    } else {
+      return 0;
+    }
   }
 
   get type () {
@@ -20,6 +29,10 @@ export class Cell {
 
   get cId() {
     return this._cId;
+  }
+
+  set cId(cId:string) {
+    this._cId = cId;
   }
 
   get name () {
@@ -70,5 +83,19 @@ export class Cell {
       name: this._name,
       children: this.children.map(item => item.toJson())
     };
+  }
+
+  flat(): FlatItem[] {
+    const current = {
+      cId: this._cId,
+      type: this._type,
+      name: this._name,
+      info: this.info,
+      deep: this.deep
+    };
+
+    const children = this.children.reduce<FlatItem[]>((acc, child) => [...acc, ...child.flat()], []);
+
+    return [current, ...children];
   }
 }
