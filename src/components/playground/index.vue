@@ -27,13 +27,15 @@
         <block-tabs :default-active='activeBlock' @change='onBlockChange' />
       </template>
       <template #block>
-        <component-block v-if='activeBlock === "component"' />
-        <logic-block v-else-if='activeBlock === "logic"' />
-        <style-board v-else-if='activeBlock === "style"' />
-        <template v-else-if='activeBlock === "layer"'>
-          <layer-block v-if='!refreshFlag' />
-        </template>
-        <setting-block v-else-if='activeBlock === "setting"' />
+        <el-config-provider size='small'>
+          <component-block v-if='activeBlock === "component"' />
+          <logic-block v-else-if='activeBlock === "logic"' />
+          <style-board v-else-if='activeBlock === "style"' />
+          <template v-else-if='activeBlock === "layer"'>
+            <layer-block v-if='!refreshFlag' />
+          </template>
+          <setting-block v-else-if='activeBlock === "setting"' />
+        </el-config-provider>
       </template>
     </layout>
   </div>
@@ -59,7 +61,7 @@ import { ElMessage } from 'element-plus';
 import PrintBlock from '../print/index.vue';
 
 const {
-  playground, refreshFlag, boardSize, toolBar, storage: { data, saveData }
+  playground, refreshFlag, boardSize, toolBar, storage: { data, saveData }, refresh
 } = useStore()!;
 const style = {
   width: playground.width,
@@ -69,6 +71,7 @@ const { activeBlock, onBlockChange } = useBlockTabs();
 
 const onDataSave = (val) => {
   saveData(val); 
+  refresh();
   ElMessage.success('保存成功');
 };
 </script>

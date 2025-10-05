@@ -8,14 +8,14 @@
       @click='onSelect("style")'>
       <el-icon><brush /></el-icon>
     </div>
-    <div
+    <!-- <div
       class='tab-item'
       :class='{
         selected: active === "setting"
       }'
       @click='onSelect("setting")'>
       <el-icon><setting /></el-icon>
-    </div>
+    </div> -->
     <div
       class='tab-item'
       :class='{
@@ -32,14 +32,14 @@
       @click='onSelect("component")'>
       <el-icon><menu-icon /></el-icon>
     </div>
-    <div
+    <!-- <div
       class='tab-item' 
       :class='{
         selected: active === "logic"
       }'
       @click='onSelect("logic")'>
       <el-icon><operation /></el-icon>
-    </div>
+    </div> -->
   </div>
 </template>
 

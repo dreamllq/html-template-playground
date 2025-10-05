@@ -12,13 +12,13 @@ export class QrCode extends Component {
   }
 
   copy(): Cell {
-    const div = new QrCode();
+    const qrCode = new QrCode();
 
-    div.style = cloneDeep(this.style);
-    div.classes = cloneDeep(this.classes);
-    div.id = this.id;
-    div.innerHtml = this.innerHtml;
+    qrCode.style = cloneDeep(this.style);
+    qrCode.classes = cloneDeep(this.classes);
+    qrCode.id = this.id;
+    qrCode.innerHtml = this.innerHtml;
 
-    return div;
+    return qrCode;
   }
 }

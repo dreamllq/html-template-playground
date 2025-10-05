@@ -21,8 +21,8 @@ const props = defineProps({
 });
 const { playground } = useViewStore()!;
 
-const item = playground.componentBlocks.list.find(item => props.component instanceof item.$class)!;
-const render = item.render;
+const item = playground.componentBlocks.list.find(item => props.component instanceof item.$class);
+const render = item?.render;
 
 </script>
 

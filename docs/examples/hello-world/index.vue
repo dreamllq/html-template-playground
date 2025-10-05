@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style='all:unset;'>
     <playground-view />
   </div>
 </template>

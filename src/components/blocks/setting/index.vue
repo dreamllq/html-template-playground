@@ -38,7 +38,6 @@ const component = computed(() => {
 
 <style scoped lang="scss">
 .setting-block{
-  padding: 12px;
   box-sizing: border-box;
 }
 </style>

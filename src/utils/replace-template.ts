@@ -15,7 +15,6 @@ export const replaceTemplate = (str, data) => {
     extracted.push(match[1].trim()); // match[1] 是括号内的内容
   }
 
-  console.log('提取的值:', extracted);
   // 输出: ['user.name', 'count', 'item.a']
 
   // 2. 替换 {{...}} 为实际值（例如使用一个数据对象）
@@ -27,6 +26,5 @@ export const replaceTemplate = (str, data) => {
     return val !== undefined ? val : match; // 如果没有对应值，保留原样
   });
 
-  console.log('替换后的字符串:', replacedStr);
   return replacedStr;
 };

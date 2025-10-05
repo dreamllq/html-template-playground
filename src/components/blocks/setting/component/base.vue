@@ -1,7 +1,5 @@
 <template>
-  <div>
-    1base
-  </div>
+  <div />
 </template>
 
 <script setup lang="ts">

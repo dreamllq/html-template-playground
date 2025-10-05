@@ -11,11 +11,14 @@
       </div>
     </template>
   </div>
+  <el-divider />
+  <logic-block />
 </template>
 
 <script setup lang="ts">
 import { useStore } from '@/components/store';
 import { ComponentBlockItem } from '@/types/component-blocks';
+import LogicBlock from '../logic/index.vue';
 
 const { playground, dragBlock, dragType } = useStore()!;
 
@@ -40,14 +43,19 @@ const onDrag = (e:DragEvent) => {
   flex-wrap: wrap;
 
   .component-blocks__item{
-    height: 100px;
-    width: 33%;
+    height: 90px;
+    width: 90px;
     overflow: hidden;
     flex: none;
     border: 1px solid var(--el-border-color);
     cursor: move;
-    margin: 10px;
+    margin: 5px;
     background-color: #fff;
+    text-align: center;
+    line-height: 90px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
   }
 }
 </style>
