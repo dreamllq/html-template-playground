@@ -84,6 +84,7 @@
   ],
   "dependencies": {
     "monaco-editor": "^0.53.0",
+    "qrcode": "^1.5.4",
     "vue3-print-nb": "^0.1.4"
   }
 }

@@ -25,6 +25,7 @@
       <el-icon><data-board /></el-icon>
     </div>
     <div
+      v-if='!refreshFlag'
       v-print='printObj'
       class='tab-item'>
       <el-icon><printer /></el-icon>
@@ -36,6 +37,7 @@
 import { Monitor, Document, Edit, View as ViewIcon, DataBoard, Printer } from '@element-plus/icons-vue';
 import { onMounted, ref } from 'vue';
 import vPrint from 'vue3-print-nb';
+import { useStore } from '../store';
 
 const props = defineProps({
   defaultActive: {
@@ -43,6 +45,8 @@ const props = defineProps({
     default: undefined
   }
 });
+
+const { refreshFlag } = useStore()!;
 
 const printObj = ref({
   id: 'printer',

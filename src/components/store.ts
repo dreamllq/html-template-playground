@@ -16,6 +16,10 @@ import { If } from '@/models/logics/if';
 import IfRender from './drawing-board/logic/if-render.vue';
 import { useDrag } from './drawing-board/use-drag';
 import { useStorage } from './storage';
+import { QrCode } from '@/models/components/qr-code';
+import QrCodeRender from './drawing-board/component/qr-code-render.vue';
+
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const [useProvideStore, useStore] = createInjectionState(() => {
 
@@ -32,11 +36,11 @@ const [useProvideStore, useStore] = createInjectionState(() => {
   const refresh = async () => {
     refreshFlag.value = true;
     await nextTick();
+    storage.save();
     refreshFlag.value = false;
     await nextTick();
     cellSelected.refresh();
     console.log(playground);
-    storage.save();
   };
 
   const drag = useDrag({
@@ -74,6 +78,15 @@ const [useProvideStore, useStore] = createInjectionState(() => {
         <path fill="currentColor" d="M2 20h8V4H2v16Zm-1 0V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1ZM13 20h8V4h-8v16Zm-1 0V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1Z"/>
         </svg>`,
     render: SpanRender
+  });
+
+  playground.componentBlocks.list.push({
+    $class: QrCode,
+    name: 'qrCode',
+    svg: `<svg viewBox="0 0 23 24">
+        <path fill="currentColor" d="M2 20h8V4H2v16Zm-1 0V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1ZM13 20h8V4h-8v16Zm-1 0V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1Z"/>
+        </svg>`,
+    render: QrCodeRender
   });
 
   playground.logicBlocks.list.push({

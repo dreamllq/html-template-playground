@@ -10,6 +10,8 @@ import ForRender from './logic/for-render.vue';
 import IfRender from './logic/if-render.vue';
 import DivRender from './component/div-render.vue';
 import SpanRender from './component/span-render.vue';
+import { QrCode } from '@/models/components/qr-code';
+import QrCodeRender from './component/qr-code-render.vue';
 
 const [useProvideViewStore, useViewStore] = createInjectionState((options:{data:any, config:any[]}) => {
   const data = ref(options.data);
@@ -34,6 +36,15 @@ const [useProvideViewStore, useViewStore] = createInjectionState((options:{data:
         <path fill="currentColor" d="M2 20h8V4H2v16Zm-1 0V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1ZM13 20h8V4h-8v16Zm-1 0V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1Z"/>
         </svg>`,
     render: SpanRender
+  });
+
+  playground.componentBlocks.list.push({
+    $class: QrCode,
+    name: 'qrCode',
+    svg: `<svg viewBox="0 0 23 24">
+        <path fill="currentColor" d="M2 20h8V4H2v16Zm-1 0V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1ZM13 20h8V4h-8v16Zm-1 0V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1Z"/>
+        </svg>`,
+    render: QrCodeRender
   });
 
   playground.logicBlocks.list.push({
